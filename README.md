@@ -13,6 +13,7 @@ We are in the "Super Position" today to entering quantum-computers era, why we c
 1. By combine X25519 and Kyber768 is to ensure it will safe against classical and computers era, however Kyber768 is new algorithm while X25519 is widely adopt and proven, so we called we area in the "Super Position".
 2. X25519 and Kyber768 today already adopt by large tech community, thats as our role model abd made we are confident.
 
+
 The combination of X25519 and Kyber768 in a hybrid key exchange is designed to harness the unique strengths of each algorithm, resulting in a more robust and versatile cryptographic solution.
 
 X25519 is an elliptic curve Diffie-Hellman (ECDH) key exchange algorithm based on the Curve25519 curve. It offers several advantages, including efficient key generation, compact key sizes, and resilience against various common attacks. X25519 excels in terms of both performance and security, making it an ideal choice for key exchange operations.
