@@ -26,7 +26,7 @@ By combining X25519 and Kyber768 in a hybrid key exchange, you can leverage the 
 
 The `SPHINXKey` namespace provides functions for generating key pairs, calculating addresses, and printing key information. It relies on functionality from other included headers such as `Hybrid_key.hpp` and `Hash.hpp`.
 
-#### Functions
+### Functions
 
 ##### `generate_hybrid_keypair()`
 
