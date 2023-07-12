@@ -14,11 +14,11 @@ The `SPHINXKey` namespace provides functions for generating key pairs, calculati
 
 #### Functions
 
-#### `generateKeyPair()`
+`generateKeyPair()`
 
 This function generates a hybrid key pair by calling the `generateHybridKeypair()` function from `SPHINXHybridKey` namespace. It returns the generated key pair.
 
-#### `generateAddress(const std::string& publicKey, const std::string& contractName)`
+`generateAddress(const std::string& publicKey, const std::string& contractName)`
 
 This function calculates the address for a smart contract based on a given public key and contract name. It takes the public key and contract name as input parameters and performs the following steps:
 
@@ -27,7 +27,7 @@ This function calculates the address for a smart contract based on a given publi
 - Generates a unique identifier for the smart contract by concatenating the contract name and the hash, separated by an underscore.
 - Returns the contract identifier as the smart contract address.
 
-#### `calculatePublicKey(const std::string& privateKey)`
+`calculatePublicKey(const std::string& privateKey)`
 
 This function calculates the public key from a given private key. It takes the private key as input and performs the following steps:
 
@@ -39,12 +39,10 @@ This function calculates the public key from a given private key. It takes the p
 - The resulting signature is stored but not used further.
 - Converts the `publicKeyBytes` array to a string representation of the public key and returns it.
 
-#### `printKeyPair()`
+`printKeyPair()`
 
 This function generates a hybrid key pair by calling the `generate_hybrid_keypair()` function from `SPHINXHybridKey` namespace.
 It extracts the public key from the hybrid key pair and prints both the public key and the address by calling `SPHINXHash::SPHINX_256()` function.
-
-**Note:** The provided code snippet doesn't show the complete implementation of the functions in the `SPHINXHybridKey`, `SPHINXHash`, and `SPHINXSign` namespaces. To fully understand the functionality, the implementation of those namespaces is required.
 
 
 ### Note
