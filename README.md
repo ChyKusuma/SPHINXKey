@@ -8,6 +8,19 @@ This repository contains code for the SPHINXKey project, which is a `Generating 
 
 ## Components
 
+We are in the "Super Position" today to entering quantum-computers era, why we choosen hybrid scheme and why it must X25519 and Kyber768?
+
+1. By combine X25519 and Kyber768 is to ensure it will safe against classical and computers era, however Kyber768 is new algorithm while X25519 is widely adopt and proven, so we called we area in the "Super Position".
+2. X25519 and Kyber768 today already adopt by large tech community, thats as our role model abd made we are confident.
+
+The combination of X25519 and Kyber768 in a hybrid key exchange is designed to harness the unique strengths of each algorithm, resulting in a more robust and versatile cryptographic solution.
+
+X25519 is an elliptic curve Diffie-Hellman (ECDH) key exchange algorithm based on the Curve25519 curve. It offers several advantages, including efficient key generation, compact key sizes, and resilience against various common attacks. X25519 excels in terms of both performance and security, making it an ideal choice for key exchange operations.
+
+On the other hand, Kyber768 is a post-quantum key encapsulation mechanism (KEM) that addresses the security challenges posed by quantum computers. It is based on the Learning With Errors (LWE) problem and provides strong resistance against attacks by quantum adversaries. Kyber768 offers a robust security guarantee in a post-quantum computing era when traditional cryptographic schemes may be vulnerable.
+
+By combining X25519 and Kyber768 in a hybrid key exchange, you can leverage the efficiency and security benefits of X25519 while also incorporating the post-quantum resistance of Kyber768. This hybrid approach enables you to strike a balance between immediate performance needs and long-term security considerations. It is particularly advantageous in scenarios where both efficient key exchange and protection against future quantum threats are crucial.
+
 ### SPHINXKey Namespace
 
 The `SPHINXKey` namespace provides functions for generating key pairs, calculating addresses, and printing key information. It relies on functionality from other included headers such as `Hybrid_key.hpp` and `Hash.hpp`.
