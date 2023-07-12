@@ -8,11 +8,11 @@ This repository contains code for the SPHINXSign project, which is a `Generating
 
 ## Components
 
-## SPHINXKey Namespace
+### SPHINXKey Namespace
 
 The `SPHINXKey` namespace provides functions for generating key pairs, calculating addresses, and printing key information. It relies on functionality from other included headers such as `Hybrid_key.hpp`, `Hash.hpp`, and `Sign.hpp`.
 
-### Functions
+#### Functions
 
 #### `generateKeyPair()`
 
