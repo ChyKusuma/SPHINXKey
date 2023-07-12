@@ -8,11 +8,13 @@ This repository contains code for the SPHINXKey project, which is a `Generating 
 
 ## Components
 
-We are in the "Super Position" today to entering quantum-computers era, why we choosen hybrid scheme and why it must X25519 and Kyber768?
+In the thrilling era of quantum computers, where we find ourselves in a `Super Position` between classical and quantum realms, the choice of a hybrid key exchange scheme combining X25519 and Kyber768 holds immense significance. Let's explore why this combination is the perfect fit.
 
-1. By combine X25519 and Kyber768 is to ensure it will safe against classical and computers era, however Kyber768 is new algorithm while X25519 is widely adopt and proven, so we called we area in the "Super Position".
-2. X25519 and Kyber768 today already adopt by large tech community, thats as our role model abd made we are confident.
+Embracing the Best of Both Worlds: X25519, a battle-tested and widely adopted algorithm, provides a solid foundation of proven security and efficient key generation. On the other hand, Kyber768 represents the cutting-edge of post-quantum cryptography, designed to resist attacks from powerful quantum computers. By combining these two exceptional algorithms, we enter a "Super Position" where we benefit from the strengths of both classical and quantum-resistant cryptography.
 
+Inspiration from Tech Giants: The widespread adoption of X25519 and Kyber768 by the larger tech community serves as our guiding light and inspiration. These algorithms have garnered trust and confidence from experts and industry leaders, paving the way for their integration into our hybrid scheme. By following in the footsteps of these role models, we embrace a solution that is not only innovative but also aligns with industry best practices.
+
+In this era of immense technological possibilities, the combination of X25519 and Kyber768 in a hybrid key exchange scheme symbolizes our readiness to face the challenges presented by quantum computing. It demonstrates our commitment to leverage the proven track record of X25519 and the promising resilience of Kyber768. Together, these algorithms empower us to navigate the quantum landscape with confidence, ensuring the security and longevity of our cryptographic systems.
 
 The combination of X25519 and Kyber768 in a hybrid key exchange is designed to harness the unique strengths of each algorithm, resulting in a more robust and versatile cryptographic solution.
 
