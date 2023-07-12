@@ -42,7 +42,6 @@
 #include <string>
 #include "Hybrid_key.hpp"
 #include "Hash.hpp"
-#include "Sign.hpp"
 
 
 namespace SPHINXKey {
