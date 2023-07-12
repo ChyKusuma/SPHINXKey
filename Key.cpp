@@ -11,21 +11,31 @@
  */
 
 
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// This code defines a namespace SPHINXKey containing several functions related to key generation and manipulation. Breakdown through each function and understand its purpose:
+// The code is enclosed in the SPHINXHybridKey namespace.
 
-  // generateKeyPair(): This function generates a hybrid key pair using the generateHybridKeypair() function from the "Hybrid_key.hpp" file. It returns the generated hybrid key pair.
+  // The generate_hybrid_keypair function is responsible for generating a hybrid keypair. It initializes an instance of HybridKeypair and then generates the Kyber768 key pair, Kyber768 public key, and X25519 key pair. Finally, it returns the generated hybrid keypair.
 
-  // generateAddress(const std::string& publicKey, const std::string& contractName): This function takes a public key and a contract name as input. It converts the public key to bytes and calculates the SPHINX-256 hash of the public key using the SPHINXHash::SPHINX_256() function. Then, it generates a unique identifier for the smart contract by combining the contract name and the public key hash. Finally, it converts the unique identifier to a string and returns it as the smart contract address.
+  // The generate_x25519_key_pair function generates an X25519 key pair using the curve25519_generate_keypair function. It returns a pair of unsigned char arrays representing the public and private keys.
 
-  // calculatePublicKey(const std::string& privateKey): This function takes a private key as input. It converts the private key to bytes and generates a hybrid key pair using the generateKeyPair() function. It then retrieves the public key from the hybrid key pair and converts it to a string. The function also performs some additional operations related to signature verification, but it is not clear from the provided code how those operations are relevant. Finally, it returns the calculated public key as a string.
+  // The generate_kyber768_key_pair function generates a Kyber768 private key using the keygen function. It returns the generated private key.
 
-  // printKeyPair(): This function generates a hybrid key pair using the generate_hybrid_keypair() function from the "Hybrid_key.hpp" file. It extracts the public key from the hybrid key pair and assigns it to the publicKey variable. Then, it prints the public key and the SPHINX-256 hash of the public key as the address.
+  // The merge_key_pair function merges the X25519 and Kyber768 key pairs into a hybrid keypair. It takes the X25519 key pair and Kyber768 private key as input and assigns them to the HybridKeypair structure.
 
-  // The code primarily relies on the functions and structures defined in "Hybrid_key.hpp" to generate and manipulate hybrid key pairs. It also uses functions from "Hash.hpp" and "Sign.hpp" files for hash calculations and signature verification, respectively.
+  // The performX25519KeyExchange function performs the X25519 key exchange using the curve25519_generate_shared_secret function. It takes the private and public keys as input and generates a shared key.
 
-// This code provides functionality for generating hybrid key pairs, calculating addresses from public keys, calculating public keys from private keys, and printing key pairs.
+  // The performHybridKeyExchange function performs the hybrid key exchange by combining X25519 and Kyber768. It first performs the X25519 key exchange using the shared key, private key, and public key. Then it encapsulates the shared key using the Kyber768 KEM encapsulation.
+
+  // The generate_and_perform_key_exchange function generates a hybrid keypair and performs the hybrid key exchange using the generated keypair.
+
+  // The generateAddress function generates a smart contract address based on the public key and contract name. It calculates the SPHINX-256 hash of the public key and appends it to the contract name to create a unique identifier for the smart contract.
+
+  // The calculatePublicKey function calculates the public key from the private key. It generates a hybrid keypair, merges the key pairs, and extracts the X25519 public key. Then it calculates the SPHINX-256 hash of the X25519 public key and returns it.
+
+  // The printKeyPair function prints the key pair information. It extracts the Kyber768 and X25519 public keys from the merged keypair and prints them along with the smart contract address generated using the generateAddress function.
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 #include <iostream>
@@ -35,79 +45,142 @@
 #include "Sign.hpp"
 
 
-namespace SPHINXKey {
+namespace SPHINXHybridKey {
 
-    HybridKeypair generateKeyPair() {
-        HybridKeypair hybridKeyPair = SPHINXHybridKey::generateHybridKeypair();
-        return hybridKeyPair;
+    // Function to generate the hybrid keypair
+    HybridKeypair generate_hybrid_keypair() {
+        HybridKeypair hybrid_keypair;
+
+        // Generate the Kyber768 key pair
+        hybrid_keypair.merged_key.kyber_private_key = generate_kyber768_key_pair();
+
+        // Generate the Kyber768 public key from the private key
+        hybrid_keypair.merged_key.kyber_public_key = kyber768_kem::keygen(hybrid_keypair.merged_key.kyber_private_key);
+
+        // Generate the X25519 key pair
+        hybrid_keypair.x25519_key = generate_x25519_key_pair();
+
+        return hybrid_keypair;
     }
 
-    std::string generateAddress(const std::string& publicKey, const std::string& contractName) {
-        // Convert the public key to bytes
-        unsigned char publicKeyBytes[32];
-        for (int i = 0; i < 32; i++) {
-            publicKeyBytes[i] = publicKey[i];
-        }
+    // Function to generate the X25519 key pair
+    std::pair<unsigned char[32], unsigned char[32]> generate_x25519_key_pair() {
+        std::pair<unsigned char[32], unsigned char[32]> x25519_key;
 
-        // Calculate the SPHINX-256 hash of the public key
+        // Generate the X25519 key pair using curve25519_generate_keypair function
+        curve25519_generate_keypair(x25519_key.first, x25519_key.second);
+        
+        return x25519_key;
+    }
+
+    // Function to generate the Kyber768 key pair
+    kyber768_kem::PrivateKey generate_kyber768_key_pair() {
+        kyber768_kem::PrivateKey private_key;
+
+        // Generate the Kyber768 private key using keygen function
+        kyber768_kem::keygen(private_key);
+        
+        return private_key;
+    }
+
+    // Function to merge the X25519 and Kyber768 key pairs
+    HybridKeypair merge_key_pair(const std::pair<unsigned char[32], unsigned char[32]>& x25519_key,
+                                const kyber768_kem::PrivateKey& kyber_key) {
+        HybridKeypair hybrid_keypair;
+
+        // Assign the X25519 key pair to hybrid_keypair
+        hybrid_keypair.x25519_key = x25519_key;
+
+        // Assign the Kyber768 private key to hybrid_keypair
+        hybrid_keypair.merged_key.kyber_private_key = kyber_key;
+
+        // Generate the Kyber768 public key from the Kyber768 private key
+        hybrid_keypair.merged_key.kyber_public_key = kyber768_kem::keygen(hybrid_keypair.merged_key.kyber_private_key);
+
+        return hybrid_keypair;
+    }
+
+    // Function to perform the X25519 key exchange
+    void performX25519KeyExchange(unsigned char shared_key[32], const unsigned char private_key[32], const unsigned char public_key[32]) {
+        // Perform the X25519 key exchange to obtain the shared key using curve25519_generate_shared_secret function
+        curve25519_generate_shared_secret(shared_key, private_key, public_key);
+    }
+
+    // Function to perform the hybrid key exchange combining X25519 and Kyber768
+    void performHybridKeyExchange(unsigned char shared_key[32], const std::pair<unsigned char[32], unsigned char[32]>& x25519_key,
+                                 const kyber768_kem::PrivateKey& kyber_key) {
+        // Perform the X25519 key exchange
+        unsigned char x25519_shared_key[32];
+        performX25519KeyExchange(x25519_shared_key, x25519_key.first, kyber_key.data());
+
+        // Perform the Kyber768 KEM encapsulation using kyber768_kem::encapsulate function
+        kyber768_kem::PublicKey kyber_public_key = kyber768_kem::keygen(kyber_key);
+        kyber768_kem::encapsulate(shared_key, x25519_key.second, kyber_public_key.data());
+    }
+
+    // Function to generate the hybrid keypair and perform the key exchange
+    HybridKeypair generate_and_perform_key_exchange() {
+        HybridKeypair hybrid_keypair = generate_hybrid_keypair();
+
+        // Perform the hybrid key exchange using the generated key pair
+        performHybridKeyExchange(hybrid_keypair.merged_key.shared_key, hybrid_keypair.x25519_key, hybrid_keypair.merged_key.kyber_private_key);
+
+        return hybrid_keypair;
+    }
+
+    // Function to generate the smart contract address based on the public key and contract name
+    std::string generateAddress(const std::string& publicKey, const std::string& contractName) {
+        // Calculate the SPHINX-256 hash of the public key using SPHINXHash::SPHINX_256 function
         std::string hash = SPHINXHash::SPHINX_256(publicKey);
 
         // Generate a unique identifier for the smart contract based on the contract name and public key hash
         std::string contractIdentifier = contractName + "_" + hash;
 
-            // The function receives a publicKey and contractName as input parameters.
-            // The publicKey is assumed to be a string representation of a public key.
-            // The function converts the publicKey string into an array of unsigned char bytes called publicKeyBytes.
-            // It then calculates the SPHINX-256 hash of the publicKey using the SPHINXHash::SPHINX_256 function, which likely applies a cryptographic hash function to the publicKeyBytes.
-            // Next, a unique identifier for the smart contract is generated by concatenating the contractName and the calculated hash, separated by an underscore. This creates a string called contractIdentifier.
-            // Finally, the contractIdentifier string is returned as the smart contract address.
-
-        // Convert the unique identifier to a string and use it as the smart contract address
+        // Use the contract identifier as the smart contract address
         std::string address = contractIdentifier;
 
         return address;
     }
 
+    // Function to calculate the public key from the private key
     std::string calculatePublicKey(const std::string& privateKey) {
         // Convert the private key to bytes
-        unsigned char privateKeyBytes[32];
-        for (int i = 0; i < 32; i++) {
-            privateKeyBytes[i] = privateKey[i];
-        }
+        std::vector<uint8_t> privateKeyBytes(privateKey.begin(), privateKey.end());
 
-        // Calculate the public key from the private key
-        unsigned char publicKeyBytes[32];
-        HybridKeypair hybridKeyPair = generateKeyPair();
-        std::vector<uint8_t> privateKeyVec(privateKey.begin(), privateKey.end());
-        std::vector<uint8_t> publicKey = hybridKeyPair.x25519_key.public_key;
+        // Generate the hybrid key pair
+        HybridKeypair hybridKeyPair;
+        hybridKeyPair.x25519_key = generate_x25519_key_pair();
+        hybridKeyPair.merged_key.kyber_private_key = generate_kyber768_key_pair();
+        hybridKeyPair.merged_key.kyber_public_key = kyber768_kem::keygen(hybridKeyPair.merged_key.kyber_private_key);
 
-            // This function takes a privateKey string as input.
-            // It initializes an array of unsigned char called privateKeyBytes with a size of 32, which is the expected length of the private key in bytes.
-            // It loops through each character of the privateKey string and assigns the corresponding byte value to the privateKeyBytes array.
-            // Next, the function calls the generateKeyPair function, which returns a HybridKeypair object. This object likely contains the generated public-private key pair.
-            // The privateKey string is converted to a std::vector<uint8_t> called privateKeyVec, which is used as an argument in the SPHINXSign::verify_data function.
-            // The publicKey is extracted from the HybridKeypair object and stored in a std::vector<uint8_t> called publicKey.
-            // The SPHINXSign::verify_data function is called with the privateKeyVec, publicKey.data(), and publicKeyBytes as arguments. This function likely performs some signature verification process.
-            // The resulting signature is stored, but it seems to be unused in the subsequent code.
-            // Finally, the publicKeyBytes array is converted to a std::string called calculatedPublicKey using reinterpret_cast and specifying the length of 32 bytes.
+        // Merge the X25519 and Kyber768 key pairs
+        hybridKeyPair.merged_key = merge_key_pair(hybridKeyPair.x25519_key, hybridKeyPair.merged_key.kyber_private_key);
 
-        std::string signature = SPHINXSign::verify_data(privateKeyVec, publicKey.data(), publicKeyBytes);
+        // Get the X25519 public key from the hybrid key pair
+        std::string x25519PublicKey(reinterpret_cast<const char*>(hybridKeyPair.x25519_key.first), 32);
 
-        // Convert the public key to a string
-        std::string calculatedPublicKey = std::string(reinterpret_cast<char*>(publicKeyBytes), 32);
+        // Calculate the SPHINX-256 hash of the X25519 public key
+        std::string calculatedPublicKey = SPHINXHash::SPHINX_256(x25519PublicKey);
 
         return calculatedPublicKey;
     }
 
-    void printKeyPair() {
-        // Generate a hybrid key pair
-        SPHINXHybridKey::HybridKeypair hybridKeyPair = SPHINXHybridKey::generate_hybrid_keypair();
+    // Function to print the key pair information
+    void printKeyPair(const SPHINXHybridKey::HybridKeypair& hybridKeyPair) {
+        // Extract the public key from the merged key pair
+        std::string mergedPublicKey(reinterpret_cast<const char*>(hybridKeyPair.merged_key.kyber_public_key.data()), kyber768_kem::public_key_length);
 
-        // Extract the public key from the hybrid key pair
-        std::string publicKey = hybridKeyPair.merged_key.x25519_key.public_key;
+        // Print the merged public key and address
+        std::cout << "Merged Public key: " << mergedPublicKey << std::endl;
+        std::cout << "Address: " << SPHINXHybridKey::generateAddress(mergedPublicKey, "MyContract") << std::endl;
 
-        // Print the public key and address
-        std::cout << "Public key: " << publicKey << std::endl;
-        std::cout << "Address: " << SPHINXHash::SPHINX_256(publicKey) << std::endl;
+        // Extract the Kyber768 public key from the merged key pair
+        std::string kyberPublicKey(reinterpret_cast<const char*>(hybridKeyPair.merged_key.kyber_public_key.k.data()), kyber768_kem::public_key_length);
+
+        // Extract the X25519 public key from the merged key pair
+        std::string x25519PublicKey(reinterpret_cast<const char*>(hybridKeyPair.x25519_key.first), 32);
+
+        // Print the merged public key (Kyber768-X25519)
+        std::cout << "Merged Public key (Kyber768-X25519): " << kyberPublicKey + x25519PublicKey << std::endl;
     }
 } // namespace SPHINXKey
