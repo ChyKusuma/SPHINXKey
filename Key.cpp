@@ -45,7 +45,7 @@
 #include "Sign.hpp"
 
 
-namespace SPHINXHybridKey {
+namespace SPHINXKey {
 
     // Function to generate the hybrid keypair
     HybridKeypair generate_hybrid_keypair() {
