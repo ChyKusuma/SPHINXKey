@@ -8,24 +8,6 @@ This repository contains code for the SPHINXKey project, which is a `Generating 
 
 ## Components
 
-In the thrilling era of quantum computers, where we find ourselves in a `Super Position` between classical and quantum realms, the choice of a hybrid key exchange scheme combining X25519 and Kyber768 holds immense significance. Let's explore why this combination is the perfect fit.
-
-1. Embracing the Best of Both Worlds: X25519, a battle-tested and widely adopted algorithm, provides a solid foundation of proven security and efficient key generation. On the other hand, Kyber768 represents the cutting-edge of post-quantum cryptography, designed to resist attacks from powerful quantum computers. By combining these two exceptional algorithms, we enter a "Super Position" where we benefit from the strengths of both classical and quantum-resistant cryptography.
-
-2. Inspiration from Tech Giants: The widespread adoption of X25519 and Kyber768 by the larger tech community serves as our guiding light and inspiration. These algorithms have garnered trust and confidence from experts and industry leaders, paving the way for their integration into our hybrid scheme. By following in the footsteps of these role models, we embrace a solution that is not only innovative but also aligns with industry best practices.
-
-In this era of immense technological possibilities, the combination of X25519 and Kyber768 in a hybrid key exchange scheme symbolizes our readiness to face the challenges presented by quantum computing. It demonstrates our commitment to leverage the proven track record of X25519 and the promising resilience of Kyber768. Together, these algorithms empower us to navigate the quantum landscape with confidence, ensuring the security and longevity of our cryptographic systems.
-
-### The Purpose 
-
-The combination of X25519 and Kyber768 in a hybrid key exchange is designed to harness the unique strengths of each algorithm, resulting in a more robust and versatile cryptographic solution.
-
-X25519 is an elliptic curve Diffie-Hellman (ECDH) key exchange algorithm based on the Curve25519 curve. It offers several advantages, including efficient key generation, compact key sizes, and resilience against various common attacks. X25519 excels in terms of both performance and security, making it an ideal choice for key exchange operations.
-
-On the other hand, Kyber768 is a post-quantum key encapsulation mechanism (KEM) that addresses the security challenges posed by quantum computers. It is based on the Learning With Errors (LWE) problem and provides strong resistance against attacks by quantum adversaries. Kyber768 offers a robust security guarantee in a post-quantum computing era when traditional cryptographic schemes may be vulnerable.
-
-By combining X25519 and Kyber768 in a hybrid key exchange, we can leverage the efficiency and security benefits of X25519 while also incorporating the post-quantum resistance of Kyber768. This hybrid approach enables we to strike a balance between immediate performance needs and long-term security considerations. It is particularly advantageous in scenarios where both efficient key exchange and protection against future quantum threats are crucial.
-
 ### SPHINXKey Namespace
 
 The `SPHINXKey` namespace provides functions for generating key pairs, calculating addresses, and printing key information. It relies on functionality from other included headers such as `Hybrid_key.hpp` and `Hash.hpp`.
@@ -82,6 +64,25 @@ This function calculates the public key from a given private key. It takes the p
 ##### printKeyPair(const SPHINXHybridKey::HybridKeypair& hybridKeyPair)
 
 This function prints the key pair information by extracting the public key from the merged key pair and calling the `SPHINXHybridKey::generateAddress` function to calculate the address. It then prints the merged public key, address, and the merged public key in the format (Kyber768-X25519).
+
+
+##### The interaction and collaboration between Key.cpp and [SPHINXHybridKey](https://github.com/ChyKusuma/SPHINXHybridKey) can be summarized as follows:
+
+- In Key.cpp, the generate_hybrid_keypair() function is defined, which is responsible for generating a hybrid key pair. It internally calls functions from Hybrid_key.hpp to generate the Kyber768 key pair (generate_kyber768_key_pair()) and the X25519 key pair (generate_x25519_key_pair()). It also generates the PKE key pair and initializes the PRNG for key generation. Finally, it returns the hybrid key pair.
+
+- The performX25519KeyExchange() function in Key.cpp is used to perform the X25519 key exchange. It takes the private and public keys as inputs and uses the performX25519KeyExchange() function from Hybrid_key.hpp to perform the actual key exchange.
+
+- The performHybridKeyExchange() function in Key.cpp combines the X25519 and Kyber768 key pairs to perform a hybrid key exchange. It calls the performX25519KeyExchange() function and also uses the Kyber768 KEM (kyber768_kem::encapsulate) to encapsulate the shared key. The encapsulated key is stored in the shared_key parameter.
+
+- The merge_key_pair() function in Key.cpp merges the X25519 and Kyber768 key pairs into a single hybrid key pair. It combines the X25519 public key and the Kyber768 private key, and generates the Kyber768 public key from the private key. The merged key pair is returned.
+
+- The generate_and_perform_key_exchange() function in Key.cpp demonstrates the complete process of generating a hybrid key pair and performing the hybrid key exchange. It calls generate_hybrid_keypair() to generate the key pair and then calls performHybridKeyExchange() to perform the key exchange using the generated key pair.
+
+- The generateAddress() function in Hybrid_key.hpp is used to generate a smart contract address based on a public key and contract name. It is called from the printKeyPair() function in Key.cpp to generate the address for a given public key.
+
+- The calculatePublicKey() function in Key.cpp calculates the public key from a given private key. It internally uses functions from Hybrid_key.hpp to generate the hybrid key pair, merge the key pairs, and extract the X25519 public key.
+
+The interaction between Key.cpp and Hybrid_key.hpp involves calling functions defined in Hybrid_key.hpp from Key.cpp to perform various operations related to hybrid key generation, key exchange, address generation, and public key calculation. Hybrid_key.hpp provides the necessary functions and data structures to support these operations, and Key.cpp utilizes them to implement the desired functionality.
 
 
 
