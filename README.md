@@ -67,19 +67,19 @@ This function prints the key pair information by extracting the public key from 
 
 #### The interaction and collaboration between Key.cpp and [SPHINXHybridKey](https://github.com/ChyKusuma/SPHINXHybridKey) can be summarized as follows:
 
-- In Key.cpp, the generate_hybrid_keypair() function is defined, which is responsible for generating a hybrid key pair. It internally calls functions from Hybrid_key.hpp to generate the Kyber768 key pair (generate_kyber768_key_pair()) and the X25519 key pair (generate_x25519_key_pair()). It also generates the PKE key pair and initializes the PRNG for key generation. Finally, it returns the hybrid key pair.
+- In Key.cpp, the `generate_hybrid_keypair()` function is defined, which is responsible for generating a hybrid key pair. It internally calls functions from Hybrid_key.hpp to generate the Kyber768 key pair `(generate_kyber768_key_pair())` and the X25519 key pair `(generate_x25519_key_pair())`. It also generates the PKE key pair and initializes the `PRNG` for key generation. Finally, it returns the hybrid key pair.
 
-- The performX25519KeyExchange() function in Key.cpp is used to perform the X25519 key exchange. It takes the private and public keys as inputs and uses the performX25519KeyExchange() function from Hybrid_key.hpp to perform the actual key exchange.
+- The `performX25519KeyExchange()` function in Key.cpp is used to perform the X25519 key exchange. It takes the private and public keys as inputs and uses the `performX25519KeyExchange()` function from Hybrid_key.hpp to perform the actual key exchange.
 
-- The performHybridKeyExchange() function in Key.cpp combines the X25519 and Kyber768 key pairs to perform a hybrid key exchange. It calls the performX25519KeyExchange() function and also uses the Kyber768 KEM (kyber768_kem::encapsulate) to encapsulate the shared key. The encapsulated key is stored in the shared_key parameter.
+- The `performHybridKeyExchange()` function in Key.cpp combines the X25519 and Kyber768 key pairs to perform a hybrid key exchange. It calls the `performX25519KeyExchange()` function and also uses the `Kyber768` KEM `(kyber768_kem::encapsulate)` to encapsulate the shared key. The encapsulated key is stored in the shared_key parameter.
 
-- The merge_key_pair() function in Key.cpp merges the X25519 and Kyber768 key pairs into a single hybrid key pair. It combines the X25519 public key and the Kyber768 private key, and generates the Kyber768 public key from the private key. The merged key pair is returned.
+- The `merge_key_pair()` function in Key.cpp merges the X25519 and Kyber768 key pairs into a single hybrid key pair. It combines the `X25519 public key` and the `Kyber768 private key`, and generates the Kyber768 public key from the private key. The merged key pair is returned.
 
-- The generate_and_perform_key_exchange() function in Key.cpp demonstrates the complete process of generating a hybrid key pair and performing the hybrid key exchange. It calls generate_hybrid_keypair() to generate the key pair and then calls performHybridKeyExchange() to perform the key exchange using the generated key pair.
+- The `generate_and_perform_key_exchange()` function in Key.cpp demonstrates the complete process of generating a hybrid key pair and performing the hybrid key exchange. It calls `generate_hybrid_keypair()` to generate the key pair and then calls `performHybridKeyExchange()` to perform the key exchange using the generated key pair.
 
-- The generateAddress() function in Hybrid_key.hpp is used to generate a smart contract address based on a public key and contract name. It is called from the printKeyPair() function in Key.cpp to generate the address for a given public key.
+- The `generateAddress()` function in Hybrid_key.hpp is used to generate a smart contract address based on a public key and contract name. It is called from the `printKeyPair()` function in Key.cpp to generate the address for a given public key.
 
-- The calculatePublicKey() function in Key.cpp calculates the public key from a given private key. It internally uses functions from Hybrid_key.hpp to generate the hybrid key pair, merge the key pairs, and extract the X25519 public key.
+- The `calculatePublicKey()` function in Key.cpp calculates the public key from a given private key. It internally uses functions from Hybrid_key.hpp to generate the hybrid key pair, merge the key pairs, and extract the X25519 public key.
 
 The interaction between Key.cpp and Hybrid_key.hpp involves calling functions defined in Hybrid_key.hpp from Key.cpp to perform various operations related to hybrid key generation, key exchange, address generation, and public key calculation. Hybrid_key.hpp provides the necessary functions and data structures to support these operations, and Key.cpp utilizes them to implement the desired functionality.
 
