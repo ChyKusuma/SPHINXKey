@@ -14,36 +14,35 @@ The `SPHINXKey` namespace provides functions for generating key pairs, calculati
 
 ### Functions
 
-##### generate_hybrid_keypair()
+#### generate_hybrid_keypair()
 
-This function generates a hybrid key pair by calling the `generate_kyber768_key_pair()` and `generate_x25519_key_pair()` functions. It returns the generated hybrid key pair.
+- This function generates a hybrid key pair by calling the `generate_kyber768_key_pair()` and `generate_x25519_key_pair()` functions. It returns the generated hybrid key pair.
 
-##### generate_x25519_key_pair()
+#### generate_x25519_key_pair()
 
-This function generates an X25519 key pair using the `curve25519_generate_keypair` function. It returns a pair of arrays representing the private and public keys.
+- This function generates an X25519 key pair using the `curve25519_generate_keypair` function. It returns a pair of arrays representing the private and public keys.
 
-##### generate_kyber768_key_pair()
+#### generate_kyber768_key_pair()
 
-This function generates a Kyber768 private key using the `kyber768_kem::keygen` function. It returns the generated private key.
+- This function generates a Kyber768 private key using the `kyber768_kem::keygen` function. It returns the generated private key.
 
-##### merge_key_pair(const std::pair<unsigned char[32], unsigned char[32]>& x25519_key, const kyber768_kem::PrivateKey& kyber_key)
+#### merge_key_pair(const std::pair<unsigned char[32], unsigned char[32]>& x25519_key, const kyber768_kem::PrivateKey& kyber_key)
 
-This function merges the X25519 and Kyber768 key pairs into a hybrid key pair. It takes the X25519 key pair and Kyber768 private key as input parameters and returns the merged hybrid key pair.
+- This function merges the X25519 and Kyber768 key pairs into a hybrid key pair. It takes the X25519 key pair and Kyber768 private key as input parameters and returns the merged hybrid key pair.
 
-##### performX25519KeyExchange(unsigned char shared_key[32], const unsigned char private_key[32], const unsigned char public_key[32])
+#### performX25519KeyExchange(unsigned char shared_key[32], const unsigned char private_key[32], const unsigned char public_key[32])
 
-This function performs the X25519 key exchange to obtain a shared key. It takes the private and public keys as input parameters and stores the shared key in the `shared_key` array.
+- This function performs the X25519 key exchange to obtain a shared key. It takes the private and public keys as input parameters and stores the shared key in the `shared_key` array.
 
-##### performHybridKeyExchange(unsigned char shared_key[32], const std::pair<unsigned char[32], unsigned char[32]>& x25519_key, const kyber768_kem::PrivateKey& kyber_key)
+#### performHybridKeyExchange(unsigned char shared_key[32], const std::pair<unsigned char[32], unsigned char[32]>& x25519_key, const kyber768_kem::PrivateKey& kyber_key)
 
-This function performs the hybrid key exchange by combining X25519 and Kyber768. It calls the `performX25519KeyExchange` function and then performs the Kyber768 KEM encapsulation using the `kyber768_kem::encapsulate` function. It stores the shared key in the `shared_key` array.
+- This function performs the hybrid key exchange by combining X25519 and Kyber768. It calls the `performX25519KeyExchange` function and then performs the Kyber768 KEM encapsulation using the `kyber768_kem::encapsulate` function. It stores the shared key in the `shared_key` array.
 
-##### generate_and_perform_key_exchange()
+#### generate_and_perform_key_exchange()
 
-This function generates a hybrid key pair by calling `generate_hybrid_keypair` and then performs the hybrid key exchange using the generated key pair. It returns the hybrid key pair.
+- This function generates a hybrid key pair by calling `generate_hybrid_keypair` and then performs the hybrid key exchange using the generated key pair. It returns the hybrid key pair.
 
-##### generateAddress(const std::string& publicKey, const std::string& contractName)
-
+#### generateAddress(const std::string& publicKey, const std::string& contractName)
 This function calculates the address for a smart contract based on a given public key and contract name. It takes the public key and contract name as input parameters and performs the following steps:
 
 - Converts the public key string to an array of 32 unsigned char bytes.
