@@ -50,7 +50,7 @@ This function calculates the address for a smart contract based on a given publi
 - Generates a unique identifier for the smart contract by concatenating the contract name and the hash, separated by an underscore.
 - Returns the contract identifier as the smart contract address.
 
-##### calculatePublicKey(const std::string& privateKey)
+#### calculatePublicKey(const std::string& privateKey)
 
 This function calculates the public key from a given private key. It takes the private key as input and performs the following steps:
 
@@ -60,7 +60,7 @@ This function calculates the public key from a given private key. It takes the p
 - Calculates the SPHINX-256 hash of the public key.
 - Returns the calculated public key.
 
-##### printKeyPair(const SPHINXHybridKey::HybridKeypair& hybridKeyPair)
+#### printKeyPair(const SPHINXHybridKey::HybridKeypair& hybridKeyPair)
 
 This function prints the key pair information by extracting the public key from the merged key pair and calling the `SPHINXHybridKey::generateAddress` function to calculate the address. It then prints the merged public key, address, and the merged public key in the format (Kyber768-X25519).
 
