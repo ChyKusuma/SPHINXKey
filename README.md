@@ -66,7 +66,7 @@ This function calculates the public key from a given private key. It takes the p
 This function prints the key pair information by extracting the public key from the merged key pair and calling the `SPHINXHybridKey::generateAddress` function to calculate the address. It then prints the merged public key, address, and the merged public key in the format (Kyber768-X25519).
 
 
-##### The interaction and collaboration between Key.cpp and [SPHINXHybridKey](https://github.com/ChyKusuma/SPHINXHybridKey) can be summarized as follows:
+#### The interaction and collaboration between Key.cpp and [SPHINXHybridKey](https://github.com/ChyKusuma/SPHINXHybridKey) can be summarized as follows:
 
 - In Key.cpp, the generate_hybrid_keypair() function is defined, which is responsible for generating a hybrid key pair. It internally calls functions from Hybrid_key.hpp to generate the Kyber768 key pair (generate_kyber768_key_pair()) and the X25519 key pair (generate_x25519_key_pair()). It also generates the PKE key pair and initializes the PRNG for key generation. Finally, it returns the hybrid key pair.
 
