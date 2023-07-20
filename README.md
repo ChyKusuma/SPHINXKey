@@ -14,35 +14,44 @@ The `SPHINXKey` namespace provides functions for generating key pairs, calculati
 
 ### Functions
 
-#### generate_hybrid_keypair()
+#### Generated hybrid key pair
+`generate_hybrid_keypair()`
 
 - This function generates a hybrid key pair by calling the `generate_kyber768_key_pair()` and `generate_x25519_key_pair()` functions. It returns the generated hybrid key pair.
 
-#### generate_x25519_key_pair()
+#### Generated X25519
+`generate_x25519_key_pair()`
 
 - This function generates an X25519 key pair using the `curve25519_generate_keypair` function. It returns a pair of arrays representing the private and public keys.
 
-#### generate_kyber768_key_pair()
+#### Generated Kyber768 key pair
+`generate_kyber768_key_pair()`
 
 - This function generates a Kyber768 private key using the `kyber768_kem::keygen` function. It returns the generated private key.
 
-#### merge_key_pair(const std::pair<unsigned char[32], unsigned char[32]>& x25519_key, const kyber768_kem::PrivateKey& kyber_key)
+#### Merged key pair
+`merge_key_pair(const std::pair<unsigned char[32], unsigned char[32]>& x25519_key, const kyber768_kem::PrivateKey& kyber_key)`
 
 - This function merges the X25519 and Kyber768 key pairs into a hybrid key pair. It takes the X25519 key pair and Kyber768 private key as input parameters and returns the merged hybrid key pair.
 
-#### performX25519KeyExchange(unsigned char shared_key[32], const unsigned char private_key[32], const unsigned char public_key[32])
+#### Perform X25519 KEX
+`performX25519KeyExchange(unsigned char shared_key[32], const unsigned char private_key[32], const unsigned char public_key[32])`
 
 - This function performs the X25519 key exchange to obtain a shared key. It takes the private and public keys as input parameters and stores the shared key in the `shared_key` array.
 
-#### performHybridKeyExchange(unsigned char shared_key[32], const std::pair<unsigned char[32], unsigned char[32]>& x25519_key, const kyber768_kem::PrivateKey& kyber_key)
+#### Perform hybrid KEX
+`performHybridKeyExchange(unsigned char shared_key[32], const std::pair<unsigned char[32], unsigned char[32]>& x25519_key, const kyber768_kem::PrivateKey& kyber_key)`
 
 - This function performs the hybrid key exchange by combining X25519 and Kyber768. It calls the `performX25519KeyExchange` function and then performs the Kyber768 KEM encapsulation using the `kyber768_kem::encapsulate` function. It stores the shared key in the `shared_key` array.
 
-#### generate_and_perform_key_exchange()
+#### Generated and perform KEX
+`generate_and_perform_key_exchange()`
 
 - This function generates a hybrid key pair by calling `generate_hybrid_keypair` and then performs the hybrid key exchange using the generated key pair. It returns the hybrid key pair.
 
-#### generateAddress(const std::string& publicKey, const std::string& contractName)
+#### Calculates the address for a smart contract based on a given public key
+`generateAddress(const std::string& publicKey, const std::string& contractName)`
+
 This function calculates the address for a smart contract based on a given public key and contract name. It takes the public key and contract name as input parameters and performs the following steps:
 
 - Converts the public key string to an array of 32 unsigned char bytes.
@@ -50,7 +59,8 @@ This function calculates the address for a smart contract based on a given publi
 - Generates a unique identifier for the smart contract by concatenating the contract name and the hash, separated by an underscore.
 - Returns the contract identifier as the smart contract address.
 
-#### calculatePublicKey(const std::string& privateKey)
+#### Calculate public key  from a given private key
+`calculatePublicKey(const std::string& privateKey)`
 
 This function calculates the public key from a given private key. It takes the private key as input and performs the following steps:
 
@@ -60,7 +70,8 @@ This function calculates the public key from a given private key. It takes the p
 - Calculates the SPHINX-256 hash of the public key.
 - Returns the calculated public key.
 
-#### printKeyPair(const SPHINXHybridKey::HybridKeypair& hybridKeyPair)
+#### Print key pair
+`printKeyPair(const SPHINXHybridKey::HybridKeypair& hybridKeyPair)`
 
 This function prints the key pair information by extracting the public key from the merged key pair and calling the `SPHINXHybridKey::generateAddress` function to calculate the address. It then prints the merged public key, address, and the merged public key in the format (Kyber768-X25519).
 
